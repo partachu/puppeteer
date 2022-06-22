@@ -197,6 +197,12 @@ export class HTTPRequest {
   }
 
   /**
+   * @returns the respective client of the request
+   */
+  _client(): string {
+    return this.#client;
+  }
+  /**
    * @returns the `ContinueRequestOverrides` that will be used
    * if the interception is allowed to continue (ie, `abort()` and
    * `respond()` aren't called).
