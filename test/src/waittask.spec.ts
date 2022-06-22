@@ -56,7 +56,7 @@ describe('waittask specs', function () {
       const {page, server} = getTestState();
 
       let found = false;
-      const waitFor = page.waitFor('//div').then(() => {
+      const waitFor = page.waitForXPath('//div').then(() => {
         return (found = true);
       });
       await page.goto(server.EMPTY_PAGE);
@@ -68,7 +68,7 @@ describe('waittask specs', function () {
     it('should allow you to select an element with parenthesis-starting xpath', async () => {
       const {page, server} = getTestState();
       let found = false;
-      const waitFor = page.waitFor('(//img)[200]').then(() => {
+      const waitFor = page.waitForXPath('(//img)[200]').then(() => {
         found = true;
       });
       await page.goto(server.EMPTY_PAGE);
@@ -82,7 +82,7 @@ describe('waittask specs', function () {
 
       await page.setContent(`<div>some text</div>`);
       let error!: Error;
-      await page.waitFor('/html/body/div').catch(error_ => {
+      await page.waitForXPath('/html/body/div').catch(error_ => {
         return (error = error_);
       });
       expect(error).toBeTruthy();
@@ -92,7 +92,7 @@ describe('waittask specs', function () {
 
       const startTime = Date.now();
       const timeout = 42;
-      await page.waitFor(timeout);
+      await page.waitForTimeout(timeout);
       expect(Date.now() - startTime).not.toBeLessThan(timeout / 2);
     });
     it('should work with multiline body', async () => {
@@ -107,7 +107,7 @@ describe('waittask specs', function () {
       const {page} = getTestState();
 
       await Promise.all([
-        page.waitFor(() => {
+        page.waitForFunction(() => {
           return window.innerWidth < 100;
         }),
         page.setViewport({width: 10, height: 10}),
@@ -116,8 +116,8 @@ describe('waittask specs', function () {
     it('should wait for predicate with arguments', async () => {
       const {page} = getTestState();
 
-      await page.waitFor(
-        (arg1: number, arg2: number) => {
+      await page.waitForFunction(
+        (arg1, arg2) => {
           return arg1 !== arg2;
         },
         {},
@@ -129,7 +129,7 @@ describe('waittask specs', function () {
     it('should log a deprecation warning', async () => {
       const {page} = getTestState();
 
-      await page.waitFor(() => {
+      await page.waitForFunction(() => {
         return true;
       });
 
